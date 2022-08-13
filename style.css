@@ -1,0 +1,40 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: rgb(232, 229, 251);
+  }
+  
+  h1 {
+    color: palegoldenrod;
+    font-weight: bold;
+  }
+  
+  h2 {
+  color: blueviolet;
+  font-size:x-large;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  padding-top: 30px;
+  }
+  
+  p {
+    color: rgb(190, 47, 8);
+    text-align:start;
+    position: relative;
+  }
+  
+  #searchBox {
+    color: rgb(30, 114, 36);
+  }
+  
+  li {
+    list-style: none;
+  }
+  
+  #results {
+    margin: 20px;
+  }
+  
+  a {
+    cursor: grab;
+    color: rgb(50, 50, 241);
+  }
+  
