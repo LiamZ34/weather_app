@@ -1,11 +1,11 @@
 // variable list
-var searchShow = document.querySelector("#searchBtn");
-var show = document.querySelector("#enterShow");
+var searchCity = document.querySelector("#searchBtn");
+var City = document.querySelector("#enterCity");
 var searchesList = document.querySelector("#searchesList");
 
 
 // click event
-searchShow.addEventListener("click", showSearch);
+searchCity.addEventListener("click", citySearch);
 // search function
 
 // var recentSearches = [];
@@ -95,8 +95,8 @@ function displayHistory() {
 const DISPLAY_LIMIT = 3;
 
 // displays the searches 
-function showSearch() {
-  var input = show.value;
+function citySearch() {
+  var input = City.value;
 
   //   if (!storedSearches.includes(input)){
   //     storedSearches.push(input)
@@ -113,59 +113,67 @@ function showSearch() {
 
   //watchmode API
   var url =
-    "https://api.watchmode.com/v1/search/?apiKey=BjJ1HfK8A6JaMjMk0UCbaDWrNACDpoIyzqqZEVDY&search_field=name&search_value=";
-  url = url + input;
+    "http://api.openweathermap.org/geo/1.0/direct?q= "+ input +",US&limit=5&appid=85a2d64b7fa797115388d73f9630cb86";
+//   url = url + input;
   fetch(url)
     .then(function (res) {
       return res.json();
     })
     .then(function (data) {
+        console.log(data);
       var resultsContainer = document.querySelector("#results");
       for (let index = 0; index < DISPLAY_LIMIT; index++) {
-        const element = data.title_results[index];
+        const element = data[index];
         const itemContainer = document.createElement("div");
-        const itemId = element.imdb_id;
-        itemContainer.setAttribute("data-imdbid", itemId);
-        const itemTitle = document.createElement("h2");
-        const itemDesc = document.createElement("p");
+        const itemLat = element.lat;
+        const itemLon = element.lon;
+        itemContainer.setAttribute("data-lon", itemLon);
+        itemContainer.setAttribute("data-lat", itemLat);
+        const itemName = document.createElement("h2");
+        // const itemTemp = document.createElement("p");
         // const itemID = document.createElement("p");
-        itemTitle.textContent = element.name;
-        itemDesc.textContent = element.type;
+        itemName.textContent = element.name;
+        // itemDesc.textContent = element.type;
 
         // Title
-        itemTitle.innerHTML = "Title: " + element.name;
+        itemName.innerHTML = "City: " + element.name;
         // Description
-        itemDesc.innerHTML = "Description: " + element.type;
+        // itemTemp.innerHTML = "Description: " + element.temp;
 
-        itemContainer.append(itemTitle, itemDesc);
+        itemContainer.append(itemName);
         resultsContainer.append(itemContainer);
         console.log(resultsContainer);
-        console.log(itemContainer.getAttribute("data-imdbid"));
-        addTrailer(itemId, itemContainer);
+        console.log(itemContainer.getAttribute("data-lat"));
+        console.log(itemContainer.getAttribute("data-lon"));
+        addTrailer(itemLat, itemLon, itemContainer);
 
         // recentSearches.append();
 
       }
   // storeRecents();
-    });
+    })
 }
 
 //k_72kh8az4
-function addTrailer(itemId, itemContainer) {
-  var url = "https://imdb-api.com/en/API/Trailer/k_5amc983n/" + itemId + "";
+function addTrailer(itemLat,itemLon, itemContainer) {
+  var url = "https://api.openweathermap.org/data/2.5/weather?lat="+ itemLat +"&lon="+ itemLon +"&appid=85a2d64b7fa797115388d73f9630cb86&units=imperial";
   fetch(url)
     .then(function (res) {
       return res.json();
     })
     .then(function (data) {
       console.log(data);
-      const element = data.linkEmbed;
+      const element = data.main;
       console.log(element);
-      const a = document.createElement("a");
-      const link = document.createTextNode("Trailer");
-      a.appendChild(link);
-      a.href = element;
-      itemContainer.append(a);
+      const itemTemp = element.temp
+      console.log(itemTemp);
+      const itemTempName = document.createElement("p");
+      itemTempName.innerHTML = "Temp :" + element.temp;
+    //   const a = document.createElement("a");
+    //   const link = document.createTextNode("Trailer");
+    //   a.appendChild(link);
+    //   a.href = element;
+      itemContainer.append(itemTempName);
       console.log(itemContainer);
     });
 }
