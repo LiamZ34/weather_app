@@ -2,7 +2,7 @@
 var searchCity = document.querySelector("#searchBtn");
 var City = document.querySelector("#enterCity");
 var searchesList = document.querySelector("#searchesList");
-
+var resultsContainer = document.querySelector("#results");
 
 // click event
 searchCity.addEventListener("click", citySearch);
@@ -111,93 +111,109 @@ function citySearch() {
     localStorage.setItem("searches", JSON.stringify(searches));
   }
 
-  //watchmode API
+  //openweathermap API
   var url =
-    "http://api.openweathermap.org/geo/1.0/direct?q= "+ input +",US&limit=1&appid=85a2d64b7fa797115388d73f9630cb86";
-//   url = url + input;
-  fetch(url)
-    .then(function (res) {
-      return res.json();
-    })
-    .then(function (data) {
-        console.log(data);
-      var resultsContainer = document.querySelector("#results");
-        const element = data[0];
-        const itemContainer = document.createElement("div");
-        const itemLat = element.lat;
-        const itemLon = element.lon;
-        itemContainer.setAttribute("data-lon", itemLon);
-        itemContainer.setAttribute("data-lat", itemLat);
-        const itemName = document.createElement("h2");
-        // const itemTemp = document.createElement("p");
-        // const itemID = document.createElement("p");
-        itemName.textContent = element.name;
-        // itemDesc.textContent = element.type;
-
-        // Title
-        itemName.innerHTML = "City: " + element.name;
-        // Description
-        // itemTemp.innerHTML = "Description: " + element.temp;
-
-        itemContainer.append(itemName);
-        resultsContainer.append(itemContainer);
-        console.log(resultsContainer);
-        console.log(itemContainer.getAttribute("data-lat"));
-        console.log(itemContainer.getAttribute("data-lon"));
-        addTrailer(itemLat, itemLon, itemContainer);
-
-        // recentSearches.append();
-
-      
-  // storeRecents();
-    })
-}
-
-//k_72kh8az4
-function addTrailer(itemLat,itemLon, itemContainer) {
-  var url = "https://api.openweathermap.org/data/2.5/onecall?lat="+ itemLat +"&lon="+ itemLon +"&appid=85a2d64b7fa797115388d73f9630cb86&units=imperial";
+    "http://api.openweathermap.org/geo/1.0/direct?q= " + input + ",US&limit=1&appid=85a2d64b7fa797115388d73f9630cb86";
+  //   url = url + input;
   fetch(url)
     .then(function (res) {
       return res.json();
     })
     .then(function (data) {
       console.log(data);
-      // var infoContainer = document.createElement("div");
-      // infoContainer.innerHTML = "";
+      resultsContainer.innerHTML = "";
+
+      const element = data[0];
+      const itemContainer = document.createElement("div");
+      const itemLat = element.lat;
+      const itemLon = element.lon;
+      itemContainer.setAttribute("data-lon", itemLon);
+      itemContainer.setAttribute("data-lat", itemLat);
+      // const itemTemp = document.createElement("p");
+      // const itemID = document.createElement("p");
+      // itemName.textContent = element.name;
+      // itemDesc.textContent = element.type;
+
+      // Title
+      // Description
+      // itemTemp.innerHTML = "Description: " + element.temp;
+      resultsContainer.append(itemContainer);
+      console.log(resultsContainer);
+      console.log(itemContainer.getAttribute("data-lat"));
+      console.log(itemContainer.getAttribute("data-lon"));
+      addTrailer(itemLat, itemLon, itemContainer, element.name);
+
+      // recentSearches.append();
+
+
+      // storeRecents();
+    })
+}
+
+//k_72kh8az4
+function addTrailer(itemLat, itemLon, itemContainer, name) {
+  var url = "https://api.openweathermap.org/data/2.5/onecall?lat=" + itemLat + "&lon=" + itemLon + "&appid=85a2d64b7fa797115388d73f9630cb86&units=imperial";
+  fetch(url)
+    .then(function (res) {
+      return res.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      console.log(name)
+      const itemName = document.createElement("h2");
+      itemName.textContent = "City: " + name;
+      itemContainer.setAttribute("style", "border:1px solid black")
+      const iconEl = document.createElement("img")
       const today = data.current;
+      iconEl.src = "http://openweathermap.org/img/wn/"+today.weather[0].icon+".png"
       const itemTemp = today.temp
       console.log(itemTemp);
       const itemTempName = document.createElement("p");
-      itemTempName.innerHTML = "Temp :" + itemTemp;
+      itemTempName.textContent = "Temp :" + itemTemp;
       const itemWind = today.wind_speed;
       const itemWindName = document.createElement("p");
-      itemWindName.innerHTML = "Wind:" + itemWind + "MPH";
+      itemWindName.textContent = "Wind:" + itemWind + "MPH";
       const itemHumidity = today.humidity;
       const itemHumidityName = document.createElement("p");
-      itemHumidityName.innerHTML = "Humidity:" + itemHumidity + "%";
+      itemHumidityName.textContent = "Humidity:" + itemHumidity + "%";
       const uviBtn = document.createElement("button");
-      uviBtn.setAttribute("type","button");
+      uviBtn.setAttribute("type", "button");
       if (today.uvi < 3) {
-        uviBtn.setAttribute("class","btn btn-success");
+        uviBtn.setAttribute("class", "btn btn-success");
       }
       else if (today.uvi > 7) {
-        uviBtn.setAttribute("class","btn btn-danger");
+        uviBtn.setAttribute("class", "btn btn-danger");
       }
       else {
-        uviBtn.setAttribute("class","btn btn-warning");
+        uviBtn.setAttribute("class", "btn btn-warning");
       }
-      uviBtn.textContent=today.uvi 
+      uviBtn.textContent = today.uvi
+      itemName.append(iconEl)
+      itemContainer.append(itemName, itemTempName, itemWindName, itemHumidityName, uviBtn);
+      $("#fiveDayForecast").empty()
 
-
-    //   const a = document.createElement("a");
-    //   const link = document.createTextNode("Trailer");
-    //   a.appendChild(link);
-    //   a.href = element;
-    // infoContainer.appendChild(itemContainer);
-    //   itemContainer.append(itemTempName, itemWindName, itemHumidityName, uviBtn);
-    //   console.log(itemContainer);
+      for (var i = 1; i < 6; i++) {
+        console.log(data.daily[i])
+        var singleDay = data.daily[i]
+        var date = moment.unix(singleDay.dt).format("ddd")
+        const cardDiv = $("<div>").addClass("card col-2")
+        const titleEl = $("<h3>").addClass("card-title").text(date)
+        $("#fiveDayForecast").append(cardDiv.append(titleEl))
+      }
     });
-}
+};
+
+// const fiveDay = document.querySelector('#container');
+// // const fiveDay = getElementById('5-day-forecast');
+// for (var i = 5; i < 0; i++) {
+//   const rowDiv = $("<div>").addclass('card col-2')
+//   console.log(this)
+//   fiveDay.append(rowDiv)
+//   // $(".container").append(rowDiv);
+// }
+
+
+
 // localStorage.setItem("searches", JSON.stringify({movietitle : input}));
 // const savedSearches = JSON.parse(localStorage.getItem('searches'));
 // document.getElementById('savedSearches').textContent = searches;
