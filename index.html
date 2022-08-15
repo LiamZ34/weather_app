@@ -21,50 +21,27 @@
             </div>
         </div>
         <!-- search bar -->
-        <div class="row">
+        <div class="row" style="border:1px solid black">
             <div class="col-3 bg-light pb-2 pt-3" id="searchBox">
-                <div class="row">
-                    <div class="col-12">
-                        <h4>Search for a City:</h4>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12">
-                        <div class="input-group">
-                            <!-- adding search-input id to input field -->
-                            <input class="form-control" type="text" id="enterCity">
-                            <button type="button" id="searchBtn" class="btn btn-primary"><i
-                                    class="fas fa-search"></i></button>
-                        </div>
-                    </div>
-                    <!-- Search results appear here -->
-                    <div class="row" id="searchResults">
-                        <div class="col-12">
-                            
-                            <div class="cityName"></div><img class="icon">
-                        
-                        </div>
-                    </div>
-                    <!-- <div id="searchesList"></div> -->
-                    <ul id="searchesList"></ul>
-
-
+                <div class="input-group">
+                    <!-- adding search-input id to input field -->
+                    <input class="form-control" type="text" id="enterCity">
+                    <button type="button" id="searchBtn" class="btn btn-primary"><i class="fas fa-search"></i></button>
                 </div>
             </div>
+            <!-- Search results appear here -->
 
-            <div class="col-7">
-                <div class="row">
-                    <div id="results"></div>
-                </div>
+            <!-- <div id="searchesList"></div> -->
+            <ul id="searchesList"></ul>
 
-            </div>
-
-
+            <div class="col-8 card" id="results">hello</div>
         </div>
+    </div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="./script.js"></script>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./script.js"></script>
 </body>
 
 </html>

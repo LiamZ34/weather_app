@@ -113,7 +113,7 @@ function citySearch() {
 
   //watchmode API
   var url =
-    "http://api.openweathermap.org/geo/1.0/direct?q= "+ input +",US&limit=5&appid=85a2d64b7fa797115388d73f9630cb86";
+    "http://api.openweathermap.org/geo/1.0/direct?q= "+ input +",US&limit=1&appid=85a2d64b7fa797115388d73f9630cb86";
 //   url = url + input;
   fetch(url)
     .then(function (res) {
@@ -122,8 +122,7 @@ function citySearch() {
     .then(function (data) {
         console.log(data);
       var resultsContainer = document.querySelector("#results");
-      for (let index = 0; index < DISPLAY_LIMIT; index++) {
-        const element = data[index];
+        const element = data[0];
         const itemContainer = document.createElement("div");
         const itemLat = element.lat;
         const itemLon = element.lon;
@@ -149,32 +148,54 @@ function citySearch() {
 
         // recentSearches.append();
 
-      }
+      
   // storeRecents();
     })
 }
 
 //k_72kh8az4
 function addTrailer(itemLat,itemLon, itemContainer) {
-  var url = "https://api.openweathermap.org/data/2.5/weather?lat="+ itemLat +"&lon="+ itemLon +"&appid=85a2d64b7fa797115388d73f9630cb86&units=imperial";
+  var url = "https://api.openweathermap.org/data/2.5/onecall?lat="+ itemLat +"&lon="+ itemLon +"&appid=85a2d64b7fa797115388d73f9630cb86&units=imperial";
   fetch(url)
     .then(function (res) {
       return res.json();
     })
     .then(function (data) {
       console.log(data);
-      const element = data.main;
-      console.log(element);
-      const itemTemp = element.temp
+      // var infoContainer = document.createElement("div");
+      // infoContainer.innerHTML = "";
+      const today = data.current;
+      const itemTemp = today.temp
       console.log(itemTemp);
       const itemTempName = document.createElement("p");
-      itemTempName.innerHTML = "Temp :" + element.temp;
+      itemTempName.innerHTML = "Temp :" + itemTemp;
+      const itemWind = today.wind_speed;
+      const itemWindName = document.createElement("p");
+      itemWindName.innerHTML = "Wind:" + itemWind + "MPH";
+      const itemHumidity = today.humidity;
+      const itemHumidityName = document.createElement("p");
+      itemHumidityName.innerHTML = "Humidity:" + itemHumidity + "%";
+      const uviBtn = document.createElement("button");
+      uviBtn.setAttribute("type","button");
+      if (today.uvi < 3) {
+        uviBtn.setAttribute("class","btn btn-success");
+      }
+      else if (today.uvi > 7) {
+        uviBtn.setAttribute("class","btn btn-danger");
+      }
+      else {
+        uviBtn.setAttribute("class","btn btn-warning");
+      }
+      uviBtn.textContent=today.uvi 
+
+
     //   const a = document.createElement("a");
     //   const link = document.createTextNode("Trailer");
     //   a.appendChild(link);
     //   a.href = element;
-      itemContainer.append(itemTempName);
-      console.log(itemContainer);
+    // infoContainer.appendChild(itemContainer);
+    //   itemContainer.append(itemTempName, itemWindName, itemHumidityName, uviBtn);
+    //   console.log(itemContainer);
     });
 }
 // localStorage.setItem("searches", JSON.stringify({movietitle : input}));
