@@ -187,6 +187,10 @@ function addTrailer(itemLat, itemLon, itemContainer, name) {
       else {
         uviBtn.setAttribute("class", "btn btn-warning");
       }
+      // the date of the city goes here 
+      var cityDate = moment().format(" (MMM Do YY)");
+      itemName.append(cityDate);
+      // the icon of the weather for each city goes here
       uviBtn.textContent = today.uvi
       itemName.append(iconEl)
       itemContainer.append(itemName, itemTempName, itemWindName, itemHumidityName, uviBtn);
@@ -199,6 +203,7 @@ function addTrailer(itemLat, itemLon, itemContainer, name) {
         const cardDiv = $("<div>").addClass("card col-2")
         const titleEl = $("<h3>").addClass("card-title").text(date)
         $("#fiveDayForecast").append(cardDiv.append(titleEl))
+        
       }
     });
 };
