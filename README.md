@@ -17,4 +17,4 @@ THEN I am again presented with current and future conditions for that city
 
 ![Screen Shot 2022-11-13 at 3 17 49 AM](https://user-images.githubusercontent.com/103050228/201512536-54415129-d756-4bbe-ae79-ed265db4bff6.png)
 
-to see the live version [click here] (https://liamz34.github.io/weather_app/) 
+to see the live version [click here](https://liamz34.github.io/weather_app/) 
